@@ -31,21 +31,22 @@ class MainWindow:
         self.btnClear.pack(side=tk.LEFT)
         
     def onClickCalculate(self):
-        if not self.LOCK_FLAG:
-            self.LOCK_FLAG = True
-        
-            pObj = self.w.find_all()
-            points = []
-            for p in pObj:
-                coord = self.w.coords(p)
-                points.append((coord[0]+self.RADIUS, coord[1]+self.RADIUS))
+        if self.LOCK_FLAG:
+            return
+        self.LOCK_FLAG = True
 
-            vp = Voronoi(points)
-            vp.process()
-            lines = vp.get_output()
-            self.drawLinesOnCanvas(lines)
-            
-            print lines
+        pObj = self.w.find_all()
+        points = []
+        for p in pObj:
+            coord = self.w.coords(p)
+            points.append((coord[0]+self.RADIUS, coord[1]+self.RADIUS))
+
+        vp = Voronoi(points)
+        vp.process()
+        lines = vp.get_output()
+        self.drawLinesOnCanvas(lines)
+
+        self.LOCK_FLAG = True
 
     def onClickClear(self):
         self.LOCK_FLAG = False

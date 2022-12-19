@@ -182,14 +182,8 @@ class Voronoi:
         if (i is None): return False, None
         if (i.p.x == p.x): return False, None
 
-        a = 0.0
-        b = 0.0
-
-        if i.pprev is not None:
-            a = (self.intersection(i.pprev.p, i.p, 1.0*p.x)).y
-        if i.pnext is not None:
-            b = (self.intersection(i.p, i.pnext.p, 1.0*p.x)).y
-
+        a = 0.0 if i.pprev is None else (self.intersection(i.pprev.p, i.p, 1.0*p.x)).y
+        b = 0.0 if i.pnext is None else (self.intersection(i.p, i.pnext.p, 1.0*p.x)).y
         if (((i.pprev is None) or (a <= p.y)) and ((i.pnext is None) or (p.y <= b))):
             py = p.y
             px = 1.0 * ((i.p.x)**2 + (i.p.y-py)**2 - p.x**2) / (2*i.p.x - 2*p.x)
@@ -217,10 +211,9 @@ class Voronoi:
             c = 1.0 * (p0.y**2 + p0.x**2 - l**2) / z0 - 1.0 * (p1.y**2 + p1.x**2 - l**2) / z1
 
             py = 1.0 * (-b-math.sqrt(b*b - 4*a*c)) / (2*a)
-            
+
         px = 1.0 * (p.x**2 + (p.y-py)**2 - l**2) / (2*p.x-2*l)
-        res = Point(px, py)
-        return res
+        return Point(px, py)
 
     def finish_edges(self):
         l = self.x1 + (self.x1 - self.x0) + (self.y1 - self.y0)
